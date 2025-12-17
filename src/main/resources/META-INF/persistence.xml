@@ -23,10 +23,9 @@
         <properties>
             <!-- Driver JDBC -->
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <!-- Configuração AWS RDS - Use variáveis de ambiente ou valores padrão -->
-            <property name="javax.persistence.jdbc.url" value="${DB_URL:jdbc:postgresql://cofry-2.cc5w4muoa5ca.us-east-1.rds.amazonaws.com:5432/postgres?characterEncoding=UTF-8&amp;useUnicode=true}"/>
+            <property name="javax.persistence.jdbc.url" value="${DB_URL:jdbc:postgresql://db.fiwaesurcrufiwomcqih.supabase.co:5432/postgres?sslmode=require&amp;characterEncoding=UTF-8&amp;useUnicode=true}"/>
             <property name="javax.persistence.jdbc.user" value="${DB_USER:postgres}"/>
-            <property name="javax.persistence.jdbc.password" value="${DB_PASSWORD:jala.0725.A}"/>
+            <property name="javax.persistence.jdbc.password" value="${DB_PASSWORD:Cofry.0725}"/>
             
             <!-- Configurações do Hibernate -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>

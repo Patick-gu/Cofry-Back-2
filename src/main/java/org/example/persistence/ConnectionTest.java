@@ -11,7 +11,7 @@ public class ConnectionTest {
         System.out.println("===========================================");
         System.out.println();
         try (Connection conn = ConnectionFactory.getConnection()) {
-            System.out.println("✅ Conectado com sucesso ao banco AWS RDS!");
+            System.out.println("✅ Conectado com sucesso ao banco de dados!");
             System.out.println();
             System.out.println("2. Informações do Banco de Dados:");
             DatabaseMetaData metaData = conn.getMetaData();
@@ -63,11 +63,11 @@ public class ConnectionTest {
             System.err.println("Mensagem: " + e.getMessage());
             System.err.println();
             System.err.println("Possíveis causas:");
-            System.err.println("1. Banco AWS RDS não está acessível");
+            System.err.println("1. Banco de dados não está acessível");
             System.err.println("2. Credenciais incorretas (usuário/senha)");
-            System.err.println("3. Security Group bloqueando conexão (verifique na AWS)");
-            System.err.println("4. Porta 5432 não está aberta no Security Group");
-            System.err.println("5. VPC/Subnet incorretas");
+            System.err.println("3. Firewall/Security Group bloqueando conexão");
+            System.err.println("4. Porta 5432 não está aberta");
+            System.err.println("5. Configuração SSL incorreta (Supabase requer SSL)");
             System.err.println();
             e.printStackTrace();
         } catch (RuntimeException e) {

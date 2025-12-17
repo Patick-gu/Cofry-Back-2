@@ -1,4 +1,4 @@
-.PHONY: build run stop logs clean deploy
+.PHONY: build run stop logs clean deploy commit
 
 build:
 	mvn clean package -DskipTests
@@ -22,4 +22,13 @@ deploy:
 
 health-check:
 	./scripts/health-check.sh
+
+commit:
+	@if [ -f scripts/auto-commit.sh ]; then \
+		bash scripts/auto-commit.sh "$(MESSAGE)"; \
+	elif [ -f scripts/auto-commit.ps1 ]; then \
+		powershell -ExecutionPolicy Bypass -File scripts/auto-commit.ps1 "$(MESSAGE)"; \
+	else \
+		echo "❌ Nenhum script de commit encontrado!"; \
+	fi
 

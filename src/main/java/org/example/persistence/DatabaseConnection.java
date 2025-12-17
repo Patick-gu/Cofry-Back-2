@@ -8,9 +8,9 @@ import java.util.Map;
 public class DatabaseConnection {
     private static EntityManagerFactory entityManagerFactory;
     private static final String PERSISTENCE_UNIT_NAME = "CofryPU";
-    private static final String DEFAULT_DB_URL = "jdbc:postgresql:
+    private static final String DEFAULT_DB_URL = "jdbc:postgresql://db.fiwaesurcrufiwomcqih.supabase.co:5432/postgres?sslmode=require";
     private static final String DEFAULT_DB_USER = "postgres";
-    private static final String DEFAULT_DB_PASSWORD = "jala.0725.A";
+    private static final String DEFAULT_DB_PASSWORD = "Cofry.0725";
     private static final String DB_URL = System.getenv().getOrDefault("DB_URL", DEFAULT_DB_URL);
     private static final String DB_USER = System.getenv().getOrDefault("DB_USER", DEFAULT_DB_USER);
     private static final String DB_PASSWORD = System.getenv().getOrDefault("DB_PASSWORD", DEFAULT_DB_PASSWORD);
