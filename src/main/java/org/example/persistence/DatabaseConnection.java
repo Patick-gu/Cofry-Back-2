@@ -8,7 +8,7 @@ import java.util.Map;
 public class DatabaseConnection {
     private static EntityManagerFactory entityManagerFactory;
     private static final String PERSISTENCE_UNIT_NAME = "CofryPU";
-    private static final String DEFAULT_DB_URL = "jdbc:postgresql://db.qcgvvrbwtjijyylxxugb.supabase.co:5432/postgres?sslmode=require";
+    private static final String DEFAULT_DB_URL = "jdbc:postgresql://cofry-2.cc5w4muoa5ca.us-east-1.rds.amazonaws.com:5432/postgres?sslmode=require";
     private static final String DEFAULT_DB_USER = "postgres";
     private static final String DEFAULT_DB_PASSWORD = "Cofry.072519";
     private static final String DB_URL = System.getenv().getOrDefault("DB_URL", DEFAULT_DB_URL);

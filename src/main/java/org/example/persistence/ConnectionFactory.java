@@ -3,7 +3,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 public class ConnectionFactory {
-    private static final String DEFAULT_HOST = "db.qcgvvrbwtjijyylxxugb.supabase.co";
+    private static final String DEFAULT_HOST = "cofry-2.cc5w4muoa5ca.us-east-1.rds.amazonaws.com";
     private static final String DEFAULT_PORT = "5432";
     private static final String DEFAULT_DB_NAME = "postgres";
     private static final String DEFAULT_USER = "postgres";
@@ -22,6 +22,9 @@ public class ConnectionFactory {
         String host = System.getenv().getOrDefault("DB_HOST", DEFAULT_HOST);
         String port = System.getenv().getOrDefault("DB_PORT", DEFAULT_PORT);
         String dbName = System.getenv().getOrDefault("DB_NAME", DEFAULT_DB_NAME);
+        if (host.contains("rds.amazonaws.com")) {
+            return String.format("jdbc:postgresql://%s:%s/%s?sslmode=require", host, port, dbName);
+        }
         if (host.contains("supabase.co")) {
             return String.format("jdbc:postgresql://%s:%s/%s?sslmode=require", host, port, dbName);
         }

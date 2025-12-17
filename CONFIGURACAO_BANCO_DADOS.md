@@ -1,16 +1,17 @@
 # 🔌 Configuração de Banco de Dados
 
-## 📊 Banco Atual: **Supabase (PostgreSQL)**
+## 📊 Banco Atual: **AWS RDS (PostgreSQL)**
 
 ### Configuração Padrão
 
 ```
-Host: db.qcgvvrbwtjijyylxxugb.supabase.co
+Host: cofry-2.cc5w4muoa5ca.us-east-1.rds.amazonaws.com
 Porta: 5432
 Banco: postgres
 Usuário: postgres
 Senha: Cofry.072519
-SSL: Obrigatório (sslmode=require)
+SSL: Recomendado (sslmode=require)
+Região: us-east-1
 ```
 
 ---
