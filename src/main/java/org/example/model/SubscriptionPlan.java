@@ -1,4 +1,4 @@
-﻿package org.example.model;
+package org.example.model;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

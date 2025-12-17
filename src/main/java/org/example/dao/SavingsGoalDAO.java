@@ -1,4 +1,4 @@
-﻿package org.example.dao;
+package org.example.dao;
 import org.example.model.SavingsGoal;
 import org.example.model.GoalStatusEnum;
 import org.example.persistence.JdbcUtil;

@@ -1,4 +1,4 @@
-﻿package org.example.model;
+package org.example.model;
 import javax.persistence.*;
 @Entity
 @Table(name = "asset_category", schema = "investments")

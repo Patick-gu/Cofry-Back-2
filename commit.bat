@@ -10,3 +10,4 @@ if "%1"=="" (
 
 powershell -ExecutionPolicy Bypass -File scripts\auto-commit.ps1 "%*"
 
+

@@ -1,4 +1,4 @@
-﻿package org.example.dao;
+package org.example.dao;
 import org.example.model.Card;
 import org.example.model.CardTypeEnum;
 import org.example.persistence.JdbcUtil;

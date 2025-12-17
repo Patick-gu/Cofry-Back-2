@@ -1,4 +1,4 @@
-﻿package org.example.persistence;
+package org.example.persistence;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;

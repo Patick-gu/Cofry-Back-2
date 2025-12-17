@@ -1,4 +1,4 @@
-﻿package org.example.utils;
+package org.example.utils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;

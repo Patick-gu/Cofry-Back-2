@@ -1,4 +1,4 @@
-﻿package org.example.dao;
+package org.example.dao;
 import org.example.model.Boleto;
 import org.example.model.BoletoStatus;
 import org.example.persistence.JdbcUtil;

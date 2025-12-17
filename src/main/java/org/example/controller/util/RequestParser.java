@@ -1,4 +1,4 @@
-﻿package org.example.controller.util;
+package org.example.controller.util;
 import com.google.gson.Gson;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;

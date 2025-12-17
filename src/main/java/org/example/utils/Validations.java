@@ -1,4 +1,4 @@
-﻿package org.example.utils;
+package org.example.utils;
 import java.util.regex.Pattern;
 public class Validations {
     private static final String EMAIL_PATTERN = 

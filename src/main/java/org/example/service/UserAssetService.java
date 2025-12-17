@@ -1,4 +1,4 @@
-﻿package org.example.service;
+package org.example.service;
 import org.example.dao.UserAssetDAO;
 import org.example.dao.AssetDAO;
 import org.example.model.UserAsset;

@@ -72,3 +72,4 @@ GET http://localhost:8080/api/users
 
 **Status:** ✅ Todas as alterações concluídas e prontas para teste!
 
+

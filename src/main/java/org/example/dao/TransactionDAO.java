@@ -1,4 +1,4 @@
-﻿package org.example.dao;
+package org.example.dao;
 import org.example.model.Transaction;
 import org.example.model.TransactionTypeEnum;
 import org.example.persistence.JdbcUtil;

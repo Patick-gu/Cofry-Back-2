@@ -1,4 +1,4 @@
-﻿package org.example.dto;
+package org.example.dto;
 public class BoletoRequestDTO {
     private String title; 
     private String amount; 

@@ -1,4 +1,4 @@
-﻿package org.example.dto;
+package org.example.dto;
 public class PixRequestDTO {
     private Integer sourceAccountId; 
     private Integer destinationAccountId; 

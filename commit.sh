@@ -11,3 +11,4 @@ fi
 
 bash scripts/auto-commit.sh "$@"
 
+

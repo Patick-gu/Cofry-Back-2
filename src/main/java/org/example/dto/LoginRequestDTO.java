@@ -1,4 +1,4 @@
-﻿package org.example.dto;
+package org.example.dto;
 public class LoginRequestDTO {
     private String email;      
     private String password;

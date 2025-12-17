@@ -1,4 +1,4 @@
-﻿package org.example.model;
+package org.example.model;
 public enum AccountPlan {
     BASIC("Basic", 0.00),
     PREMIUM("Premium", 29.90),

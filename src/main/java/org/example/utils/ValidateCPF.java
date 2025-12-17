@@ -1,4 +1,4 @@
-﻿package org.example.utils;
+package org.example.utils;
 public class ValidateCPF {
     public static boolean isValid(String cpf) {
         if (cpf == null || cpf.trim().isEmpty()) {

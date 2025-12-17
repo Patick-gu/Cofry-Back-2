@@ -1,4 +1,4 @@
-﻿package org.example.dao;
+package org.example.dao;
 import org.example.model.AssetCategory;
 import org.example.persistence.JdbcUtil;
 import java.sql.*;

@@ -1,4 +1,4 @@
-﻿package org.example.dto;
+package org.example.dto;
 public class UserRequestDTO {
     private String fullName;
     private String email;

@@ -1,4 +1,4 @@
-﻿package org.example.dto;
+package org.example.dto;
 import java.math.BigDecimal;
 public class AssetCardDTO {
     private Integer assetId;

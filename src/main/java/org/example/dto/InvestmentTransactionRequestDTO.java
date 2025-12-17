@@ -1,4 +1,4 @@
-﻿package org.example.dto;
+package org.example.dto;
 public class InvestmentTransactionRequestDTO {
     private Integer userId;
     private Integer assetId;

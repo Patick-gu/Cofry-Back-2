@@ -1,4 +1,4 @@
-﻿package org.example.dto;
+package org.example.dto;
 public class AccountRequestDTO {
     private Integer userId;
     private String bankCode;      

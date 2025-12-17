@@ -1,4 +1,4 @@
-﻿package org.example.dao;
+package org.example.dao;
 import org.example.model.Account;
 import org.example.model.AccountTypeEnum;
 import org.example.persistence.JdbcUtil;

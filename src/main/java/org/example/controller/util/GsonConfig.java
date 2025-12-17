@@ -1,4 +1,4 @@
-﻿package org.example.controller.util;
+package org.example.controller.util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;

@@ -1,4 +1,4 @@
-﻿package org.example.dto;
+package org.example.dto;
 import java.util.List;
 public class InvestmentDashboardDTO {
     private Integer userId;

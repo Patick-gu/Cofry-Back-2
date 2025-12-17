@@ -1,4 +1,4 @@
-﻿package org.example.config;
+package org.example.config;
 import javax.servlet.http.HttpServletResponse;
 public class CorsConfig {
     public static void addCorsHeaders(HttpServletResponse response, String origin) {
