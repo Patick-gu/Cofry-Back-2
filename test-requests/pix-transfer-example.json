@@ -1,0 +1,7 @@
+{
+  "sourceAccountId": 1,
+  "destinationAccountId": 2,
+  "amount": "100.50",
+  "description": "Transferência PIX para pagamento de serviços"
+}
+

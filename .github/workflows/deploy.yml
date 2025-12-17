@@ -1,0 +1,67 @@
+name: Build and Deploy to AWS EC2
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+env:
+  AWS_REGION: us-east-1
+  DOCKER_IMAGE: cofry-backend
+  DOCKER_TAG: latest
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
+    
+    - name: Build with Maven
+      run: mvn clean package -DskipTests
+    
+    - name: Build Docker image
+      run: docker build -t ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }} .
+    
+    - name: Save Docker image
+      run: docker save ${{ env.DOCKER_IMAGE }}:${{ env.DOCKER_TAG }} -o image.tar
+    
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+    
+    - name: Create EC2 key file
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/ec2_key
+        chmod 600 ~/.ssh/ec2_key
+    
+    - name: Deploy to EC2
+      env:
+        EC2_HOST: ${{ secrets.EC2_HOST }}
+        EC2_USER: ${{ secrets.EC2_USER }}
+      run: |
+        scp -i ~/.ssh/ec2_key -o StrictHostKeyChecking=no \
+          image.tar \
+          docker-compose.yml \
+          env.example \
+          deploy.sh \
+          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/cofry-backend/
+        
+        ssh -i ~/.ssh/ec2_key -o StrictHostKeyChecking=no \
+          ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
+          "mkdir -p ~/cofry-backend && cd ~/cofry-backend && chmod +x deploy.sh && ./deploy.sh"
+

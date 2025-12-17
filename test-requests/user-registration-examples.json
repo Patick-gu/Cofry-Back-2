@@ -1,0 +1,30 @@
+[
+  {
+    "description": "Usuário completo válido",
+    "request": {
+      "fullName": "Maria Oliveira Costa",
+      "email": "maria.oliveira@example.com",
+      "cpf": "987.654.321-00",
+      "password": "SenhaForte@2024"
+    }
+  },
+  {
+    "description": "Usuário com nome composto",
+    "request": {
+      "fullName": "José da Silva Santos",
+      "email": "jose.santos@example.com",
+      "cpf": "111.222.333-44",
+      "password": "MinhaSenha123!"
+    }
+  },
+  {
+    "description": "Usuário com apenas primeiro nome",
+    "request": {
+      "fullName": "Pedro",
+      "email": "pedro@example.com",
+      "cpf": "555.666.777-88",
+      "password": "SenhaSegura456!"
+    }
+  }
+]
+

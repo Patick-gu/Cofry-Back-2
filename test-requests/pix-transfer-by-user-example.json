@@ -1,0 +1,7 @@
+{
+  "sourceAccountId": 1,
+  "destinationUserId": 2,
+  "amount": "250.00",
+  "description": "Transferência PIX usando ID do usuário de destino"
+}
+

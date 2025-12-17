@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+             http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+             version="2.2">
+    
+    <persistence-unit name="CofryPU" transaction-type="RESOURCE_LOCAL">
+        
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        
+        <!-- Entidades do modelo -->
+        <class>org.example.model.SubscriptionPlan</class>
+        <class>org.example.model.User</class>
+        <class>org.example.model.Address</class>
+        <class>org.example.model.Account</class>
+        <class>org.example.model.TransactionCategory</class>
+        <class>org.example.model.Transaction</class>
+        <class>org.example.model.Budget</class>
+        <class>org.example.model.SavingsGoal</class>
+        
+        <!-- Propriedades de conexão -->
+        <properties>
+            <!-- Driver JDBC -->
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <!-- Configuração AWS RDS - Use variáveis de ambiente ou valores padrão -->
+            <property name="javax.persistence.jdbc.url" value="${DB_URL:jdbc:postgresql://cofry-2.cc5w4muoa5ca.us-east-1.rds.amazonaws.com:5432/postgres?characterEncoding=UTF-8&amp;useUnicode=true}"/>
+            <property name="javax.persistence.jdbc.user" value="${DB_USER:postgres}"/>
+            <property name="javax.persistence.jdbc.password" value="${DB_PASSWORD:jala.0725.A}"/>
+            
+            <!-- Configurações do Hibernate -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>
+            <!-- Opções: validate, update, create, create-drop -->
+            
+            <!-- Logging SQL -->
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.use_sql_comments" value="true"/>
+            
+            <!-- Pool de conexão -->
+            <property name="hibernate.connection.pool_size" value="10"/>
+            <property name="hibernate.connection.autocommit" value="false"/>
+            
+            <!-- Cache (desabilitado) -->
+            <property name="hibernate.cache.use_second_level_cache" value="false"/>
+            <property name="hibernate.cache.use_query_cache" value="false"/>
+        </properties>
+        
+    </persistence-unit>
+    
+</persistence>
+

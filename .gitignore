@@ -1,0 +1,15 @@
+target/
+.idea/
+*.iml
+.vscode/
+*.class
+*.jar
+*.war
+!target/Cofry-Backend2.war
+.DS_Store
+.env
+.env.local
+*.log
+*.tar
+image.tar
+node_modules/

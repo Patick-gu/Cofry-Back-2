@@ -1,0 +1,12 @@
+{
+  "userId": 1,
+  "accountId": 1,
+  "cardNumber": "4532015112830366",
+  "cardHolderName": "JOÃO SILVA SANTOS",
+  "expiryDate": "12/25",
+  "cvv": "123",
+  "cardType": "CREDIT",
+  "brand": "Visa",
+  "limitAmount": "5000.00"
+}
+

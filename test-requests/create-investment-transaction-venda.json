@@ -1,0 +1,9 @@
+{
+  "userId": 1,
+  "assetId": 1,
+  "type": "Venda",
+  "price": "50.00",
+  "quantity": "5",
+  "status": "COMPLETED"
+}
+

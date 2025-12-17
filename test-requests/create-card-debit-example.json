@@ -1,0 +1,11 @@
+{
+  "userId": 1,
+  "accountId": 1,
+  "cardNumber": "5354123456789012",
+  "cardHolderName": "JOÃO SILVA SANTOS",
+  "expiryDate": "2025-12-31",
+  "cvv": "456",
+  "cardType": "DEBIT",
+  "brand": "Mastercard"
+}
+

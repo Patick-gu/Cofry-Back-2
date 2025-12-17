@@ -1,0 +1,13 @@
+{
+  "sourceAccountId": 1,
+  "destinationAccountId": 2,
+  "categoryId": 1,
+  "amount": 200.00,
+  "transactionType": "TRANSFER",
+  "description": "Transferência atualizada - Pagamento de serviços",
+  "transactionDate": "2024-12-15",
+  "isRecurring": false,
+  "installmentCurrent": null,
+  "installmentTotal": null
+}
+
