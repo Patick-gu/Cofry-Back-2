@@ -148,7 +148,18 @@ curl http://localhost:8080/api/users
 
 ## 🐳 Deploy com Docker
 
-### Opção 1: Docker Compose (Recomendado)
+### Opção 1: Render (Recomendado para começar)
+
+O projeto está **100% compatível com Render**! Veja o guia completo em [`DEPLOY_RENDER.md`](DEPLOY_RENDER.md)
+
+**Quick Start:**
+1. Acesse https://dashboard.render.com
+2. Conecte o repositório `Patick-gu/Cofry-Back-2`
+3. Selecione "Docker" como runtime
+4. Configure variáveis de ambiente
+5. Deploy automático! ✨
+
+### Opção 2: Docker Compose (Local)
 
 1. **Configure as variáveis de ambiente:**
 
@@ -170,7 +181,7 @@ docker logs -f cofry-backend
 curl http://localhost:8080/api/users
 ```
 
-### Opção 2: Build manual do Docker
+### Opção 3: Build manual do Docker
 
 ```bash
 # Build da imagem

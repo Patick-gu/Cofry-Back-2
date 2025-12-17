@@ -11,6 +11,12 @@ public class ConnectionFactory {
     private static String getDatabaseUrl() {
         String databaseUrl = System.getenv("DATABASE_URL");
         if (databaseUrl != null && !databaseUrl.trim().isEmpty()) {
+            if (databaseUrl.startsWith("jdbc:")) {
+                return databaseUrl;
+            }
+            if (databaseUrl.startsWith("postgresql://")) {
+                return convertRenderDatabaseUrl(databaseUrl);
+            }
             return databaseUrl;
         }
         String host = System.getenv().getOrDefault("DB_HOST", DEFAULT_HOST);
@@ -18,11 +24,55 @@ public class ConnectionFactory {
         String dbName = System.getenv().getOrDefault("DB_NAME", DEFAULT_DB_NAME);
         return String.format("jdbc:postgresql://%s:%s/%s", host, port, dbName);
     }
+    private static String convertRenderDatabaseUrl(String renderUrl) {
+        try {
+            if (renderUrl.startsWith("postgresql://")) {
+                renderUrl = renderUrl.replace("postgresql://", "jdbc:postgresql://");
+                return renderUrl;
+            }
+            return renderUrl;
+        } catch (Exception e) {
+            System.err.println("Erro ao converter DATABASE_URL: " + e.getMessage());
+            return renderUrl;
+        }
+    }
     private static String getDatabaseUser() {
-        return System.getenv().getOrDefault("DB_USER", DEFAULT_USER);
+        String dbUser = System.getenv("DB_USER");
+        if (dbUser != null && !dbUser.trim().isEmpty()) {
+            return dbUser;
+        }
+        String databaseUrl = System.getenv("DATABASE_URL");
+        if (databaseUrl != null && databaseUrl.startsWith("postgresql://")) {
+            try {
+                java.net.URI uri = new java.net.URI(databaseUrl.replace("postgresql://", "http://"));
+                String userInfo = uri.getUserInfo();
+                if (userInfo != null && userInfo.contains(":")) {
+                    return userInfo.split(":")[0];
+                }
+            } catch (Exception e) {
+                System.err.println("Erro ao extrair usuário de DATABASE_URL: " + e.getMessage());
+            }
+        }
+        return DEFAULT_USER;
     }
     private static String getDatabasePassword() {
-        return System.getenv().getOrDefault("DB_PASSWORD", DEFAULT_PASSWORD);
+        String dbPassword = System.getenv("DB_PASSWORD");
+        if (dbPassword != null && !dbPassword.trim().isEmpty()) {
+            return dbPassword;
+        }
+        String databaseUrl = System.getenv("DATABASE_URL");
+        if (databaseUrl != null && databaseUrl.startsWith("postgresql://")) {
+            try {
+                java.net.URI uri = new java.net.URI(databaseUrl.replace("postgresql://", "http://"));
+                String userInfo = uri.getUserInfo();
+                if (userInfo != null && userInfo.contains(":")) {
+                    return userInfo.split(":")[1];
+                }
+            } catch (Exception e) {
+                System.err.println("Erro ao extrair senha de DATABASE_URL: " + e.getMessage());
+            }
+        }
+        return DEFAULT_PASSWORD;
     }
     public static Connection getConnection() throws SQLException {
         try {
