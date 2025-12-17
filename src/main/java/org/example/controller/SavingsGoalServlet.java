@@ -12,6 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+@WebServlet(name = "SavingsGoalServlet", urlPatterns = {"/api/savings-goals", "/api/savings-goals/*"})
+public class SavingsGoalServlet extends HttpServlet {
+    private SavingsGoalService savingsGoalService;
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        savingsGoalService = new SavingsGoalService();
+    }
     private static class DepositRequest {
         private BigDecimal amount;
         public BigDecimal getAmount() {

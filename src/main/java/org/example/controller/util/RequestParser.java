@@ -40,4 +40,14 @@ public class RequestParser {
             return null;
         }
     }
+    public static String getRequestBody(HttpServletRequest request) throws IOException {
+        StringBuilder json = new StringBuilder();
+        try (BufferedReader reader = request.getReader()) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                json.append(line);
+            }
+        }
+        return json.toString();
+    }
 }

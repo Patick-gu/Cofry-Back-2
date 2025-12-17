@@ -17,6 +17,15 @@ import java.io.IOException;
 import java.util.List;
 @WebServlet(name = "InvestmentServlet", urlPatterns = {
     "/api/investments/transaction",
+    "/api/investments/*"
+})
+public class InvestmentServlet extends HttpServlet {
+    private InvestmentFormService investmentFormService;
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        investmentFormService = new InvestmentFormService();
+    }
     private Integer extractUserIdFromPath(String requestURI) {
         try {
             int userIndex = requestURI.indexOf("/user/");

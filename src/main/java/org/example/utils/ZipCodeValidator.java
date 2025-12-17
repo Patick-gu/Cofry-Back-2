@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 public class ZipCodeValidator {
-    private static final String VIACEP_API_URL = "https:
+    private static final String VIACEP_API_URL = "https://viacep.com.br/ws/";
     private static final String VIACEP_API_FORMAT = "/json/";
     public static boolean isValidFormat(String zipCode) {
         if (zipCode == null || zipCode.trim().isEmpty()) {

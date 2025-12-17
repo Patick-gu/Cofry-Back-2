@@ -13,6 +13,85 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+@WebServlet(name = "TransactionServlet", urlPatterns = {"/api/transactions", "/api/transactions/*"})
+public class TransactionServlet extends HttpServlet {
+    private TransactionService transactionService;
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        transactionService = new TransactionService();
+    }
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        try {
+            String pathInfo = request.getPathInfo();
+            if (pathInfo == null || pathInfo.equals("/")) {
+                String accountIdParam = request.getParameter("accountId");
+                if (accountIdParam != null) {
+                    Integer accountId = Integer.parseInt(accountIdParam);
+                    List<Transaction> transactions = transactionService.getTransactionsBySourceAccount(accountId);
+                    JsonResponse.sendSuccess(response, transactions);
+                } else {
+                    List<Transaction> transactions = transactionService.getAllTransactions();
+                    JsonResponse.sendSuccess(response, transactions);
+                }
+                return;
+            }
+            Integer id = RequestParser.extractIdFromPath(pathInfo);
+            if (id == null) {
+                JsonResponse.sendBadRequest(response, "ID inválido");
+                return;
+            }
+            Transaction transaction = transactionService.getTransactionById(id);
+            if (transaction == null) {
+                JsonResponse.sendNotFound(response, "Transação não encontrada");
+                return;
+            }
+            JsonResponse.sendSuccess(response, transaction);
+        } catch (NumberFormatException e) {
+            JsonResponse.sendBadRequest(response, "ID inválido");
+        } catch (Exception e) {
+            e.printStackTrace();
+            JsonResponse.sendInternalError(response, "Erro ao buscar transações: " + e.getMessage());
+        }
+    }
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+        try {
+            String requestBody = RequestParser.getRequestBody(request);
+            com.google.gson.JsonObject jsonObject = com.google.gson.JsonParser.parseString(requestBody).getAsJsonObject();
+            Transaction transaction = new Transaction();
+            if (jsonObject.has("sourceAccountId")) {
+                transaction.setSourceAccountId(jsonObject.get("sourceAccountId").getAsInt());
+            }
+            if (jsonObject.has("destinationAccountId") && !jsonObject.get("destinationAccountId").isJsonNull()) {
+                transaction.setDestinationAccountId(jsonObject.get("destinationAccountId").getAsInt());
+            }
+            if (jsonObject.has("amount")) {
+                transaction.setAmount(parseAmount(jsonObject.get("amount")));
+            }
+            transaction.setTransactionType(determineTransactionType(jsonObject, transaction));
+            if (jsonObject.has("description")) {
+                transaction.setDescription(jsonObject.get("description").getAsString());
+            }
+            if (jsonObject.has("transactionDate")) {
+                LocalDate date = parseDate(jsonObject.get("transactionDate").getAsString());
+                transaction.setTransactionDate(date);
+            } else {
+                transaction.setTransactionDate(LocalDate.now());
+            }
+            Transaction createdTransaction = transactionService.createTransaction(transaction);
+            JsonResponse.sendSuccess(response, createdTransaction, HttpServletResponse.SC_CREATED);
+        } catch (IllegalArgumentException e) {
+            JsonResponse.sendBadRequest(response, e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            JsonResponse.sendInternalError(response, "Erro ao criar transação: " + e.getMessage());
+        }
+    }
     private LocalDate parseDate(String dateStr) {
         if (dateStr == null || dateStr.trim().isEmpty()) {
             return null;
