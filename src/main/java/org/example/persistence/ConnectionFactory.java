@@ -5,7 +5,7 @@ import java.sql.SQLException;
 public class ConnectionFactory {
     private static final String DEFAULT_HOST = "cofry-db.cc5w4muoa5ca.us-east-1.rds.amazonaws.com";
     private static final String DEFAULT_PORT = "5432";
-    
+    private static final String DEFAULT_DB_NAME = "postgres";
     private static final String DEFAULT_USER = "postgres";
     private static final String DEFAULT_PASSWORD = "jala.0725";
     private static String getDatabaseUrl() {
@@ -21,14 +21,15 @@ public class ConnectionFactory {
         }
         String host = System.getenv().getOrDefault("DB_HOST", DEFAULT_HOST);
         String port = System.getenv().getOrDefault("DB_PORT", DEFAULT_PORT);
-       
+        String dbName = System.getenv().getOrDefault("DB_NAME", DEFAULT_DB_NAME);
+        
         if (host.contains("rds.amazonaws.com")) {
-            return String.format("jdbc:postgresql://%s:%s/%s?sslmode=require", host, port);
+            return String.format("jdbc:postgresql://%s:%s/%s?sslmode=require", host, port, dbName);
         }
         if (host.contains("supabase.co")) {
-            return String.format("jdbc:postgresql://%s:%s/%s?sslmode=require", host, port);
+            return String.format("jdbc:postgresql://%s:%s/%s?sslmode=require", host, port, dbName);
         }
-        return String.format("jdbc:postgresql://%s:%s/%s", host, port);
+        return String.format("jdbc:postgresql://%s:%s/%s", host, port, dbName);
     }
     private static String convertRenderDatabaseUrl(String renderUrl) {
         try {
