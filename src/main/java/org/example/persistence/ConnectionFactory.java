@@ -88,10 +88,33 @@ public class ConnectionFactory {
             String url = getDatabaseUrl();
             String user = getDatabaseUser();
             String password = getDatabasePassword();
-            return DriverManager.getConnection(url, user, password);
+            
+            System.out.println("🔌 Tentando conectar ao banco de dados...");
+            System.out.println("   URL: " + url.replace(password, "***"));
+            System.out.println("   User: " + user);
+            
+            Connection conn = DriverManager.getConnection(url, user, password);
+            System.out.println("✅ Conexão estabelecida com sucesso!");
+            return conn;
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("O Driver do PostgreSQL não foi encontrado! Verifique os Artifacts.", e);
         } catch (SQLException e) {
+            String url = getDatabaseUrl();
+            String user = getDatabaseUser();
+            System.err.println("❌ Erro ao conectar ao banco de dados!");
+            System.err.println("   URL tentada: " + (url != null ? url.replace(getDatabasePassword(), "***") : "null"));
+            System.err.println("   User: " + user);
+            System.err.println("   Erro: " + e.getMessage());
+            
+            if (e.getMessage() != null && e.getMessage().contains("Network is unreachable")) {
+                System.err.println("\n💡 Possíveis soluções:");
+                System.err.println("   1. Verifique sua conexão com a internet");
+                System.err.println("   2. Verifique se o host do banco está acessível");
+                System.err.println("   3. Verifique firewall/antivírus bloqueando a conexão");
+                System.err.println("   4. Teste conectividade: ping " + (url != null && url.contains("//") ? 
+                    url.split("//")[1].split(":")[0] : "host"));
+            }
+            
             throw new RuntimeException("Erro ao conectar ao banco de dados: " + e.getMessage(), e);
         }
     }
