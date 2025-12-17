@@ -23,9 +23,9 @@
         <properties>
             <!-- Driver JDBC -->
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="${DB_URL:jdbc:postgresql://db.fiwaesurcrufiwomcqih.supabase.co:5432/postgres?sslmode=require&amp;characterEncoding=UTF-8&amp;useUnicode=true}"/>
+            <property name="javax.persistence.jdbc.url" value="${DB_URL:jdbc:postgresql://db.qcgvvrbwtjijyylxxugb.supabase.co:5432/postgres?sslmode=require&amp;characterEncoding=UTF-8&amp;useUnicode=true}"/>
             <property name="javax.persistence.jdbc.user" value="${DB_USER:postgres}"/>
-            <property name="javax.persistence.jdbc.password" value="${DB_PASSWORD:Cofry.0725}"/>
+            <property name="javax.persistence.jdbc.password" value="${DB_PASSWORD:Cofry.072519}"/>
             
             <!-- Configurações do Hibernate -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>

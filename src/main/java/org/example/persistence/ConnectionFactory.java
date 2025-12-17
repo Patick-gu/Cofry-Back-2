@@ -3,11 +3,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 public class ConnectionFactory {
-    private static final String DEFAULT_HOST = "db.fiwaesurcrufiwomcqih.supabase.co";
+    private static final String DEFAULT_HOST = "db.qcgvvrbwtjijyylxxugb.supabase.co";
     private static final String DEFAULT_PORT = "5432";
     private static final String DEFAULT_DB_NAME = "postgres";
     private static final String DEFAULT_USER = "postgres";
-    private static final String DEFAULT_PASSWORD = "Cofry.0725";
+    private static final String DEFAULT_PASSWORD = "Cofry.072519";
     private static String getDatabaseUrl() {
         String databaseUrl = System.getenv("DATABASE_URL");
         if (databaseUrl != null && !databaseUrl.trim().isEmpty()) {
