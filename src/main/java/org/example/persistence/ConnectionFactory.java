@@ -31,6 +31,11 @@ public class ConnectionFactory {
         try {
             if (renderUrl.startsWith("postgresql://")) {
                 renderUrl = renderUrl.replace("postgresql://", "jdbc:postgresql://");
+                if (!renderUrl.contains("?")) {
+                    renderUrl += "?sslmode=require";
+                } else if (!renderUrl.contains("sslmode")) {
+                    renderUrl += "&sslmode=require";
+                }
                 return renderUrl;
             }
             return renderUrl;
