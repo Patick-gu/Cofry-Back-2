@@ -5,11 +5,11 @@
 ### Configuração Padrão
 
 ```
-Host: cofry-2.cc5w4muoa5ca.us-east-1.rds.amazonaws.com
+Host: cofry-db.cc5w4muoa5ca.us-east-1.rds.amazonaws.com
 Porta: 5432
 Banco: postgres
 Usuário: postgres
-Senha: Cofry.072519
+Senha: jala.0725
 SSL: Recomendado (sslmode=require)
 Região: us-east-1
 ```
