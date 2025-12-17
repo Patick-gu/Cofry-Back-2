@@ -21,6 +21,7 @@
 -- Drop do schema investments e suas tabelas
 DROP SCHEMA IF EXISTS investments CASCADE;
 
+DROP TABLE IF EXISTS bills CASCADE;
 DROP TABLE IF EXISTS cards CASCADE;
 DROP TABLE IF EXISTS budgets CASCADE;
 DROP TABLE IF EXISTS savings_goals CASCADE;
@@ -31,6 +32,7 @@ DROP TABLE IF EXISTS addresses CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS subscription_plans CASCADE;
 
+DROP TYPE IF EXISTS bill_status_enum;
 DROP TYPE IF EXISTS card_type_enum;
 DROP TYPE IF EXISTS account_type_enum;
 DROP TYPE IF EXISTS transaction_type_enum;
@@ -39,6 +41,7 @@ DROP TYPE IF EXISTS goal_status_enum;
 -- =============================================
 -- 2. CRIAÇÃO DE ENUMS
 -- =============================================
+CREATE TYPE bill_status_enum AS ENUM ('OPEN', 'OVERDUE', 'PAID');
 CREATE TYPE card_type_enum AS ENUM ('CREDIT', 'DEBIT', 'PREPAID');
 CREATE TYPE account_type_enum AS ENUM ('CHECKING', 'SAVINGS');
 CREATE TYPE transaction_type_enum AS ENUM ('DEPOSIT', 'WITHDRAWAL', 'TRANSFER', 'PAYMENT');
@@ -205,11 +208,55 @@ CREATE INDEX IF NOT EXISTS idx_cards_user_id ON cards(user_id);
 CREATE INDEX IF NOT EXISTS idx_cards_account_id ON cards(account_id);
 CREATE INDEX IF NOT EXISTS idx_cards_status ON cards(status);
 
+-- Tabela: Boletos (Bills)
+CREATE TABLE bills (
+    bill_id BIGSERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    amount NUMERIC(15, 2) NOT NULL,
+    due_date DATE NOT NULL,
+    status bill_status_enum NOT NULL DEFAULT 'OPEN',
+    bank_code VARCHAR(3) NOT NULL,
+    wallet_code VARCHAR(5) NOT NULL,
+    our_number VARCHAR(23) NOT NULL,
+    bill_code VARCHAR(48) NOT NULL UNIQUE,
+    user_id INT,
+    paid_at TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    CONSTRAINT fk_bill_user FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE SET NULL,
+    CONSTRAINT check_positive_amount CHECK (amount > 0)
+);
+
+-- Índices para bills
+CREATE INDEX IF NOT EXISTS idx_bills_user_id ON bills(user_id);
+CREATE INDEX IF NOT EXISTS idx_bills_status ON bills(status);
+CREATE INDEX IF NOT EXISTS idx_bills_due_date ON bills(due_date);
+CREATE INDEX IF NOT EXISTS idx_bills_created_at ON bills(created_at);
+CREATE INDEX IF NOT EXISTS idx_bills_bill_code ON bills(bill_code);
+
 -- =============================================
--- 4. NOTA SOBRE DADOS BASE
+-- 4. INSERÇÃO DE DADOS BASE
 -- =============================================
--- Usuários, planos e categorias de transações devem ser cadastrados através da API do sistema
--- Este script apenas cria a estrutura das tabelas e insere dados de investimentos (ativos)
+
+-- 4.1 Planos de Assinatura
+INSERT INTO subscription_plans (name, price, description, created_at) VALUES
+('Cofry Start', 0.00, 'Plano gratuito com funcionalidades básicas', CURRENT_TIMESTAMP),
+('Cofry Pro', 7.77, 'Plano intermediário com recursos avançados', CURRENT_TIMESTAMP),
+('Cofry Black', 47.99, 'Plano premium com todos os recursos disponíveis', CURRENT_TIMESTAMP);
+
+-- 4.2 Categorias de Transações
+INSERT INTO transaction_categories (name, icon_code, created_at) VALUES
+('Alimentação', 'food', CURRENT_TIMESTAMP),
+('Transporte', 'transport', CURRENT_TIMESTAMP),
+('Moradia', 'home', CURRENT_TIMESTAMP),
+('Saúde', 'health', CURRENT_TIMESTAMP),
+('Educação', 'education', CURRENT_TIMESTAMP),
+('Lazer', 'leisure', CURRENT_TIMESTAMP),
+('Compras', 'shopping', CURRENT_TIMESTAMP),
+('Contas', 'bills', CURRENT_TIMESTAMP),
+('Salário', 'salary', CURRENT_TIMESTAMP),
+('Outros', 'other', CURRENT_TIMESTAMP);
 
 -- =============================================
 -- 5. DADOS DE INVESTIMENTOS (ATIVOS)
@@ -360,6 +407,92 @@ INSERT INTO investments.asset (ticker, name, category_id, api_identifier, is_act
                                                                                          ('HGLG11', 'CSHG Logística FII', 3, 'HGLG11.SA', TRUE),
                                                                                          ('PETR3F', 'Opção de Compra PETR3', 3, 'OPC_PETR3', TRUE), -- Exemplo de um derivativo/opção
                                                                                          ('COEBR1', 'COE Bancos BR', 3, 'EST_COE1', TRUE);
+
+-- =============================================
+-- 7. INSERÇÃO DE 20 BOLETOS DE EXEMPLO
+-- =============================================
+-- IMPORTANTE: Os boletos são inseridos sem user_id (podem ser atribuídos depois via CPF)
+-- Os códigos de boleto seguem o padrão FEBRABAN (48 dígitos)
+
+-- Boleto 1: Conta de Luz - Banco Caixa (104)
+INSERT INTO bills (title, amount, due_date, status, bank_code, wallet_code, our_number, bill_code, created_at, updated_at) VALUES
+('Conta de Energia Elétrica', 185.50, CURRENT_DATE + INTERVAL '5 days', 'OPEN'::bill_status_enum, '104', '001', '000000000000000000001', '10490010012345678901234500234500018550000000001', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Boleto 2: Conta de Água - Banco do Brasil (001)
+INSERT INTO bills (title, amount, due_date, status, bank_code, wallet_code, our_number, bill_code, created_at, updated_at) VALUES
+('Conta de Água e Esgoto', 87.30, CURRENT_DATE + INTERVAL '7 days', 'OPEN'::bill_status_enum, '001', '17', '000000000000000000002', '00190170123456789012345600234500008730000000002', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Boleto 3: Internet - Banco Santander (033)
+INSERT INTO bills (title, amount, due_date, status, bank_code, wallet_code, our_number, bill_code, created_at, updated_at) VALUES
+('Internet Fibra Ótica', 129.90, CURRENT_DATE + INTERVAL '10 days', 'OPEN'::bill_status_enum, '033', '126', '000000000000000000003', '03391260198765432109876500234500012990000000003', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Boleto 4: Telefone
+INSERT INTO bills (title, amount, due_date, status, bank_code, wallet_code, our_number, bill_code, created_at, updated_at) VALUES
+('Telefone Celular', 49.99, CURRENT_DATE + INTERVAL '12 days', 'OPEN'::bill_status_enum, '341', '109', '000000000000000000004', '3419109000000000000000040234500004999000000004', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Boleto 5: Plano de Saúde
+INSERT INTO bills (title, amount, due_date, status, bank_code, wallet_code, our_number, bill_code, created_at, updated_at) VALUES
+('Plano de Saúde Mensal', 450.00, CURRENT_DATE + INTERVAL '15 days', 'OPEN'::bill_status_enum, '001', '17', '000000000000000000005', '0019017000000000000000050234500045000000000005', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Boleto 6: Seguro Auto
+INSERT INTO bills (title, amount, due_date, status, bank_code, wallet_code, our_number, bill_code, created_at, updated_at) VALUES
+('Seguro Veicular', 320.00, CURRENT_DATE + INTERVAL '18 days', 'OPEN'::bill_status_enum, '341', '109', '000000000000000000006', '3419109000000000000000060234500032000000000006', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Boleto 7: TV por Assinatura
+INSERT INTO bills (title, amount, due_date, status, bank_code, wallet_code, our_number, bill_code, created_at, updated_at) VALUES
+('TV por Assinatura', 89.90, CURRENT_DATE + INTERVAL '20 days', 'OPEN'::bill_status_enum, '033', '126', '000000000000000000007', '0339126000000000000000070234500008990000000007', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Boleto 8: Academia
+INSERT INTO bills (title, amount, due_date, status, bank_code, wallet_code, our_number, bill_code, created_at, updated_at) VALUES
+('Academia Mensalidade', 120.00, CURRENT_DATE + INTERVAL '22 days', 'OPEN'::bill_status_enum, '104', '001', '000000000000000000008', '1049001000000000000000080234500012000000000008', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Boleto 9: Cartão de Crédito
+INSERT INTO bills (title, amount, due_date, status, bank_code, wallet_code, our_number, bill_code, created_at, updated_at) VALUES
+('Fatura Cartão de Crédito', 580.75, CURRENT_DATE + INTERVAL '25 days', 'OPEN'::bill_status_enum, '001', '17', '000000000000000000009', '0019017000000000000000090234500058075000000009', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Boleto 10: Condomínio
+INSERT INTO bills (title, amount, due_date, status, bank_code, wallet_code, our_number, bill_code, created_at, updated_at) VALUES
+('Condomínio Residencial', 380.00, CURRENT_DATE + INTERVAL '3 days', 'OPEN'::bill_status_enum, '341', '109', '000000000000000000010', '3419109000000000000000100234500038000000000010', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Boleto 11: Faculdade
+INSERT INTO bills (title, amount, due_date, status, bank_code, wallet_code, our_number, bill_code, created_at, updated_at) VALUES
+('Mensalidade Faculdade', 650.00, CURRENT_DATE + INTERVAL '8 days', 'OPEN'::bill_status_enum, '033', '126', '000000000000000000011', '0339126000000000000000110234500065000000000011', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Boleto 12: Financiamento
+INSERT INTO bills (title, amount, due_date, status, bank_code, wallet_code, our_number, bill_code, created_at, updated_at) VALUES
+('Parcela Financiamento', 850.50, CURRENT_DATE + INTERVAL '28 days', 'OPEN'::bill_status_enum, '104', '001', '000000000000000000012', '1049001000000000000000120234500085050000000012', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Boleto 13: IPTU
+INSERT INTO bills (title, amount, due_date, status, bank_code, wallet_code, our_number, bill_code, created_at, updated_at) VALUES
+('IPTU - Imposto Predial', 420.00, CURRENT_DATE + INTERVAL '30 days', 'OPEN'::bill_status_enum, '001', '17', '000000000000000000013', '0019017000000000000000130234500042000000000013', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Boleto 14: IPVA
+INSERT INTO bills (title, amount, due_date, status, bank_code, wallet_code, our_number, bill_code, created_at, updated_at) VALUES
+('IPVA - Imposto Veicular', 680.00, CURRENT_DATE + INTERVAL '35 days', 'OPEN'::bill_status_enum, '341', '109', '000000000000000000014', '3419109000000000000000140234500068000000000014', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Boleto 15: Licenciamento
+INSERT INTO bills (title, amount, due_date, status, bank_code, wallet_code, our_number, bill_code, created_at, updated_at) VALUES
+('Licenciamento Veículo', 125.00, CURRENT_DATE + INTERVAL '38 days', 'OPEN'::bill_status_enum, '033', '126', '000000000000000000015', '0339126000000000000000150234500012500000000015', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Boleto 16: Gás
+INSERT INTO bills (title, amount, due_date, status, bank_code, wallet_code, our_number, bill_code, created_at, updated_at) VALUES
+('Gás Natural Residencial', 65.80, CURRENT_DATE + INTERVAL '14 days', 'OPEN'::bill_status_enum, '104', '001', '000000000000000000016', '1049001000000000000000160234500006580000000016', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Boleto 17: Escola
+INSERT INTO bills (title, amount, due_date, status, bank_code, wallet_code, our_number, bill_code, created_at, updated_at) VALUES
+('Mensalidade Escola', 520.00, CURRENT_DATE + INTERVAL '17 days', 'OPEN'::bill_status_enum, '001', '17', '000000000000000000017', '0019017000000000000000170234500052000000000017', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Boleto 18: Streaming
+INSERT INTO bills (title, amount, due_date, status, bank_code, wallet_code, our_number, bill_code, created_at, updated_at) VALUES
+('Assinatura Streaming', 39.90, CURRENT_DATE + INTERVAL '1 day', 'OPEN'::bill_status_enum, '341', '109', '000000000000000000018', '3419109000000000000000180234500003990000000018', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Boleto 19: Material Escolar
+INSERT INTO bills (title, amount, due_date, status, bank_code, wallet_code, our_number, bill_code, created_at, updated_at) VALUES
+('Material Escolar', 280.50, CURRENT_DATE + INTERVAL '40 days', 'OPEN'::bill_status_enum, '033', '126', '000000000000000000019', '0339126000000000000000190234500028050000000019', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+-- Boleto 20: Supermercado
+INSERT INTO bills (title, amount, due_date, status, bank_code, wallet_code, our_number, bill_code, created_at, updated_at) VALUES
+('Compra Supermercado', 450.75, CURRENT_DATE + INTERVAL '45 days', 'OPEN'::bill_status_enum, '104', '001', '000000000000000000020', '1049001000000000000000200234500045075000000020', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- =============================================
 -- FIM DO SCRIPT
