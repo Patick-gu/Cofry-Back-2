@@ -20,7 +20,10 @@ public class CorsFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         String origin = httpRequest.getHeader("Origin");
-        if (origin != null) {
+        
+        // Aceita qualquer origem (inclui Vercel: *.vercel.app, localhost, etc)
+        // Isso permite que o frontend Vercel faça requisições para a API
+        if (origin != null && !origin.isEmpty()) {
             httpResponse.setHeader("Access-Control-Allow-Origin", origin);
         } else {
             httpResponse.setHeader("Access-Control-Allow-Origin", "*");
@@ -28,8 +31,10 @@ public class CorsFilter implements Filter {
 
         httpResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, PATCH");
         httpResponse.setHeader("Access-Control-Allow-Headers", 
-            "Content-Type, Authorization, X-Requested-With, Accept, Origin");
+            "Content-Type, Authorization, X-Requested-With, Accept, Origin, Access-Control-Request-Method, Access-Control-Request-Headers");
         httpResponse.setHeader("Access-Control-Allow-Credentials", "true");
+        httpResponse.setHeader("Access-Control-Expose-Headers", 
+            "Content-Type, Authorization, X-Requested-With");
         httpResponse.setHeader("Access-Control-Max-Age", "3600");
 
         if ("OPTIONS".equalsIgnoreCase(httpRequest.getMethod())) {
