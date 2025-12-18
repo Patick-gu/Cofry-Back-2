@@ -65,7 +65,7 @@ public class DatabaseConnection {
         properties.put("javax.persistence.jdbc.user", DB_USER);
         properties.put("javax.persistence.jdbc.password", DB_PASSWORD);
         properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-        properties.put("hibernate.hbm2ddl.auto", "validate"); 
+        properties.put("hibernate.hbm2ddl.auto", "validate");
         properties.put("hibernate.show_sql", "true");
         properties.put("hibernate.format_sql", "true");
         properties.put("hibernate.use_sql_comments", "true");
